@@ -11,26 +11,26 @@ model books {
   id          Int     @id(map: "books_pk") @default(autoincrement())
   name        String
   author      String
-  genre_id    Int
+  description String? @db.VarChar(500)
+  cep         String  @db.VarChar(9)
   is_new      Boolean
-  description String  @db.VarChar(500)
-  value       String  @db.VarChar(255)
+  value       String
+  genre_id    Int
   user_id     Int
   genre       genre   @relation(fields: [genre_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "books_fk0")
   users       users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "books_fk1")
+}
+
+model users {
+  id       Int     @id(map: "users_pk") @default(autoincrement())
+  name     String?
+  email    String  @unique
+  password String
+  books    books[]
 }
 
 model genre {
   id    Int     @id(map: "genre_pk") @default(autoincrement())
   name  String
   books books[]
-}
-
-model users {
-  id       Int     @id(map: "users_pk") @default(autoincrement())
-  name     String
-  email    String  @unique
-  password String
-  cep      String  @db.VarChar(9)
-  books    books[]
 }
